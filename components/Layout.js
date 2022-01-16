@@ -33,7 +33,7 @@ export function Layout(props) {
                     <a href="https://www.loom.com/share/660be7692054433c9877a9588ba80bf0" className="ml-10">
                         📺 Walkthru Video
                     </a>
-                    <a href="" className="ml-10">
+                    <a href="https://github.com/dodgeblaster/builder" className="ml-10">
                         📕 Github Repo
                     </a>
                 </div>
