@@ -82,6 +82,56 @@ export default function Home() {
         }))
     }
 
+    const addApi = () => {
+        const number = Object.keys(nodes).length / 2 + 1
+        const randomId = Date.now().toString()
+        setNodes((nodes) => ({
+            ...nodes,
+            [randomId]: {
+                id: randomId,
+                resourceType: 'ApiGateway',
+                resourceCFName: 'AWS::SERVERLESS::HTTPAPI',
+                name: 'My Endpoint',
+                type: 'start',
+                x: 80 + 30 * number,
+                y: 80 * number
+            }
+        }))
+    }
+    const addEventRule = () => {
+        const number = Object.keys(nodes).length / 2 + 1
+        const randomId = Date.now().toString()
+        setNodes((nodes) => ({
+            ...nodes,
+            [randomId]: {
+                id: randomId,
+                resourceType: 'EventBridge',
+                resourceCFName: 'AWS::EVENTS::RULE',
+                name: 'My Rule',
+                type: 'start',
+                x: 80 + 30 * number,
+                y: 80 * number
+            }
+        }))
+    }
+
+    const addCognitoUserPool = () => {
+        const number = Object.keys(nodes).length / 2 + 1
+        const randomId = Date.now().toString()
+        setNodes((nodes) => ({
+            ...nodes,
+            [randomId]: {
+                id: randomId,
+                resourceType: 'CognitoUserPool',
+                resourceCFName: 'AWS::COGNITO::USERPOOL',
+                name: 'My User Pool',
+                type: 'start',
+                x: 80 + 30 * number,
+                y: 80 * number
+            }
+        }))
+    }
+
     const RenderNodes = () => {
         return Object.keys(nodes).map((id) => {
             if (nodes[id].nodeType === 'vector') {
@@ -234,6 +284,9 @@ export default function Home() {
             <CanvasButtons
                 addLambda={addLambda}
                 addDb={addDb}
+                addApi={addApi}
+                addEventRule={addEventRule}
+                addCognitoUserPool={addCognitoUserPool}
                 editMode={editMode}
                 setEditMode={setEditMode}
                 showOutput={showOutput}
