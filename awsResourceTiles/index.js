@@ -5,12 +5,22 @@ export default {
     Lambda: {
         type: 'Lambda',
         name: 'My Lambda',
+        connectors: {
+            start: true,
+            end: true
+        },
         type: 'start',
         resourceCFName: 'AWS::SERVERLESS::FUNCTION',
         icon: () => (
             <svg width="48px" height="48px" viewBox="0 0 24 24" version="1.1">
                 <defs>
-                    <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="linearGradient-1">
+                    <linearGradient
+                        x1="0%"
+                        y1="100%"
+                        x2="100%"
+                        y2="0%"
+                        id="linearGradient-1"
+                    >
                         <stop stopColor="#C8511B" offset="0%"></stop>
                         <stop stopColor="#FF9900" offset="100%"></stop>
                     </linearGradient>
@@ -38,12 +48,21 @@ export default {
     DynamoDB: {
         type: 'DynamoDB',
         name: 'My Table',
+        connectors: {
+            start: true
+        },
         type: 'end',
         resourceCFName: 'AWS::DYNAMODB::TABLE',
         icon: () => (
             <svg width="48px" height="48px" viewBox="0 0 24 24" version="1.1">
                 <defs>
-                    <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="linearGradient-2">
+                    <linearGradient
+                        x1="0%"
+                        y1="100%"
+                        x2="100%"
+                        y2="0%"
+                        id="linearGradient-2"
+                    >
                         <stop stopColor="#2E27AD" offset="0%"></stop>
                         <stop stopColor="#527FFF" offset="100%"></stop>
                     </linearGradient>
@@ -71,13 +90,22 @@ export default {
     ApiGateway: {
         type: 'ApiGateway',
         name: 'My Endpoint',
+        connectors: {
+            end: true
+        },
         type: 'start',
         resourceCFName: 'AWS::SERVERLESS::HTTPAPI',
         icon: () => (
             <svg width="48px" height="48px" viewBox="0 0 24 24" version="1.1">
                 <title>Icon-Architecture/16/Arch_Amazon-API-Gateway_16</title>
                 <defs>
-                    <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="linearGradient-3">
+                    <linearGradient
+                        x1="0%"
+                        y1="100%"
+                        x2="100%"
+                        y2="0%"
+                        id="linearGradient-3"
+                    >
                         <stop stop-color="#B0084D" offset="0%"></stop>
                         <stop stop-color="#FF4F8B" offset="100%"></stop>
                     </linearGradient>
@@ -116,12 +144,21 @@ export default {
     EventBridge: {
         type: 'EventBridge',
         name: 'My Event Rule',
+        connectors: {
+            end: true
+        },
         type: 'start',
         resourceCFName: 'AWS::EVENTS::RULE',
         icon: () => (
             <svg width="48px" height="48px" viewBox="0 0 24 24" version="1.1">
                 <defs>
-                    <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="linearGradient-4">
+                    <linearGradient
+                        x1="0%"
+                        y1="100%"
+                        x2="100%"
+                        y2="0%"
+                        id="linearGradient-4"
+                    >
                         <stop stop-color="#B0084D" offset="0%"></stop>
                         <stop stop-color="#FF4F8B" offset="100%"></stop>
                     </linearGradient>
@@ -155,12 +192,21 @@ export default {
     CognitoUserPool: {
         type: 'CognitoUserPool',
         name: 'My User Pool',
+        connectors: {
+            end: true
+        },
         type: 'start',
         resourceCFName: 'AWS::COGNITO::USERPOOL',
         icon: () => (
             <svg width="48px" height="48px" viewBox="0 0 24 24" version="1.1">
                 <defs>
-                    <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="linearGradient-5">
+                    <linearGradient
+                        x1="0%"
+                        y1="100%"
+                        x2="100%"
+                        y2="0%"
+                        id="linearGradient-5"
+                    >
                         <stop stop-color="#BD0816" offset="0%"></stop>
                         <stop stop-color="#FF5252" offset="100%"></stop>
                     </linearGradient>

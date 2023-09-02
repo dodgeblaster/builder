@@ -15,13 +15,19 @@ function makeDynamoDbPermission(name) {
         Resource: [
             {
                 'Fn::Sub': [
-                    `arn:aws:dynamodb:\${AWS::Region}:\${AWS::AccountId}:table/${name.replace(/\s+/g, '')}${stage}:*`,
+                    `arn:aws:dynamodb:\${AWS::Region}:\${AWS::AccountId}:table/${name.replace(
+                        /\s+/g,
+                        ''
+                    )}${stage}:*`,
                     {}
                 ]
             },
             {
                 'Fn::Sub': [
-                    `arn:aws:dynamodb:\${AWS::Region}:\${AWS::AccountId}:table/${name.replace(/\s+/g, '')}${stage}`,
+                    `arn:aws:dynamodb:\${AWS::Region}:\${AWS::AccountId}:table/${name.replace(
+                        /\s+/g,
+                        ''
+                    )}${stage}`,
                     {}
                 ]
             }
@@ -51,20 +57,26 @@ function findPermissionsToAdd(edges, nodes) {
     let permissionsToAdd = {}
     Object.keys(edges).forEach((id) => {
         if (!id.startsWith('vector')) {
-            const startId = id
-            const endId = edges[id]
+            const startId = id.split('#')[0]
+            const endId = id.split('#')[1] //edges[id]
             const startNode = nodes[startId]
             const endNode = findEndingNode(nodes, edges, startId, endId)
 
             /**
              * Only handling Lambda -> DynamoDB permissions for this POC
              */
-            if (startNode.resourceType === 'Lambda' && endNode.resourceType === 'DynamoDB') {
+            if (
+                startNode.resourceType === 'Lambda' &&
+                endNode.resourceType === 'DynamoDB'
+            ) {
                 if (!permissionsToAdd[startId]) {
                     permissionsToAdd[startId] = []
                 }
 
-                permissionsToAdd[startId] = [...permissionsToAdd[startId], makeDynamoDbPermission(endNode.name)]
+                permissionsToAdd[startId] = [
+                    ...permissionsToAdd[startId],
+                    makeDynamoDbPermission(endNode.name)
+                ]
             }
         }
     })
@@ -82,7 +94,8 @@ function createCloudFormation(nodes, permissionsToAdd) {
             const node = nodes[id]
             const resourceType = node.resourceType
             const name = node.name.replace(/\s+/g, '')
-            const generateCloudFormation = resourceDefinitions[resourceType].generateCloudFormation
+            const generateCloudFormation =
+                resourceDefinitions[resourceType].generateCloudFormation
             let result = {
                 Resources: {},
                 Outputs: {}
@@ -123,7 +136,9 @@ export function Output(props) {
 
     return (
         <pre className="absolute shadow-lg text-left top-0 w-2/3 mx-auto bg-gray-800 rounded text-gray-100 top-10 h-2/3 z-10 overflow-y-scroll">
-            <div className="px-4 py-2 border-b border-gray-800 bg-gray-700">CloudFormation</div>
+            <div className="px-4 py-2 border-b border-gray-800 bg-gray-700">
+                CloudFormation
+            </div>
             <div className="px-4 py-2 ">
                 <code
                     style={{

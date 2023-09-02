@@ -30,10 +30,16 @@ export function Layout(props) {
             <main className="flex flex-col items-center justify-center w-full flex-1 px-20">
                 <div className="flex mt-10 items-center text-left">
                     <h1 className="text-2xl font-bold mb-2">AWS Builder</h1>
-                    <a href="https://www.loom.com/share/660be7692054433c9877a9588ba80bf0" className="ml-10">
+                    <a
+                        href="https://www.loom.com/share/660be7692054433c9877a9588ba80bf0"
+                        className="ml-10"
+                    >
                         📺 Walkthru Video
                     </a>
-                    <a href="https://github.com/dodgeblaster/builder" className="ml-10">
+                    <a
+                        href="https://github.com/dodgeblaster/builder"
+                        className="ml-10"
+                    >
                         📕 Github Repo
                     </a>
                 </div>
@@ -44,6 +50,7 @@ export function Layout(props) {
                         width: CANVAS_WIDTH,
                         height: CANVAS_HEIGHT
                     }}
+                    onWheel={props.pan}
                 >
                     <div
                         id="canvas"
@@ -66,7 +73,7 @@ export function Layout(props) {
                                         position: 'absolute',
                                         height: 1,
 
-                                        top: i * 32
+                                        top: i * 32 - props.panPosition.y
                                     }}
                                 />
                             )
@@ -81,7 +88,7 @@ export function Layout(props) {
                                         position: 'absolute',
                                         width: 1,
 
-                                        left: i * 32
+                                        left: i * 32 - props.panPosition.x
                                     }}
                                 />
                             )

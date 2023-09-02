@@ -44,13 +44,15 @@ const RenderLine = (props) => {
 
                 props.setEdges({
                     ...Object.keys(props.edges)
-                        .filter((id) => id !== props.startId)
+                        .filter(
+                            (id) => id !== `${props.startId}#${props.endId}`
+                        )
                         .reduce((acc, id) => {
                             acc[id] = props.edges[id]
                             return acc
                         }, {}),
-                    [props.startId]: vectorId,
-                    [vectorId]: props.endId
+                    [`${props.startId}#${vectorId}`]: true,
+                    [`${vectorId}#${props.endId}`]: true
                 })
             }}
         />
@@ -68,12 +70,28 @@ export function CanvasRenderEdges(props) {
                 transition: '1s'
             }}
         >
+            {props.inProgressLine.active && (
+                <Edge
+                    sourceX={props.inProgressLine.startX}
+                    sourceY={props.inProgressLine.startY}
+                    targetX={props.inProgressLine.endX}
+                    targetY={props.inProgressLine.endY}
+                    onClick={() => {}}
+                />
+            )}
             {Object.keys(props.edges).map((k) => {
-                const startId = k
-                const endId = props.edges[k]
+                const startId = k.split('#')[0]
+                const endId = k.split('#')[1] //props.edges[k]
 
-                const start = props.nodes[startId]
-                const end = props.nodes[endId]
+                const start = {
+                    x: props.nodes[startId].x - props.offset.x,
+                    y: props.nodes[startId].y - props.offset.y
+                }
+                const end = {
+                    x: props.nodes[endId].x - props.offset.x,
+                    y: props.nodes[endId].y - props.offset.y
+                }
+
                 return (
                     <RenderLine
                         key={k}

@@ -2,13 +2,19 @@ export function CanvasButtons(props) {
     return (
         <>
             <div className="absolute top-3 right-3 ">
-                <button onClick={props.addLambda} className="bg-gray-600 shadow text-white px-4 py-2 rounded mb-2">
+                <button
+                    onClick={props.addLambda}
+                    className="bg-gray-600 shadow text-white px-4 py-2 rounded mb-2 mr-2"
+                >
                     + Lambda
                 </button>
-                <button onClick={props.addDb} className="bg-gray-600 shadow text-white px-4 py-2 rounded mb-2">
+                <button
+                    onClick={props.addDb}
+                    className="bg-gray-600 shadow text-white px-4 py-2 rounded mb-2"
+                >
                     + DynamoDB
                 </button>
-                <button onClick={props.addApi} className="bg-gray-600 shadow text-white px-4 py-2 rounded mb-2">
+                {/* <button onClick={props.addApi} className="bg-gray-600 shadow text-white px-4 py-2 rounded mb-2">
                     + ApiGateway
                 </button>
                 <button onClick={props.addEventRule} className="bg-gray-600 shadow text-white px-4 py-2 rounded mb-2">
@@ -19,7 +25,7 @@ export function CanvasButtons(props) {
                     className="bg-gray-600 shadow text-white px-4 py-2 rounded mb-2"
                 >
                     + User Pool
-                </button>
+                </button> */}
             </div>
             <button
                 onClick={() => props.setEditMode(!props.editMode)}

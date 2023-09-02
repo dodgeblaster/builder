@@ -15,14 +15,20 @@ function Point(props) {
                 cursor: 'move' /* fallback if grab cursor is unsupported */,
                 cursor: 'grab',
                 userSelect: 'none',
-                transform: `translate(${props.x - 4}px,${props.y - 4}px) scale(${2})`
+                transform: `translate(${props.x - 4}px,${
+                    props.y - 4
+                }px) scale(${
+                    2 // * ((props.z + 100) / 100)
+                })`
             }}
             onMouseDown={(event) => {
                 if (!props.editMode) {
                     return
                 }
                 let doc = document
-                const containerBounds = document.getElementById('canvas').getBoundingClientRect()
+                const containerBounds = document
+                    .getElementById('canvas')
+                    .getBoundingClientRect()
                 let setBlockedPosition = (event) => {
                     const xExact = event.clientX - containerBounds.left
                     const yExact = event.clientY - containerBounds.top
@@ -65,12 +71,13 @@ function Point(props) {
 
 function Tile(props) {
     const Icon = () => resourceDefinitions[props.resourceType].icon()
+
     return (
         <div
             key={props.id}
-            className={`bg-gray-600 target flex shadow overflow-hidden ${props.color} ${
-                props.flashing && 'animate-pulse'
-            }`}
+            className={`bg-gray-600 target flex shadow overflow-hidden ${
+                props.color
+            } ${props.flashing && 'animate-pulse'}`}
             style={{
                 position: 'absolute',
                 width: 64 * 4,
@@ -80,43 +87,51 @@ function Tile(props) {
                 cursor: 'grab',
                 userSelect: 'none',
 
-                transform: `translate(${props.x}px,${props.y}px) scale(${1})`
+                transform: `translate(${props.x}px,${props.y}px) scale(${
+                    1 //* ((props.z + 100) / 100)
+                })`
             }}
-            onMouseDown={(event) => {
+            onPointerDown={(event) => {
                 const mouseDownTimeStamp = event.timeStamp
-                const elementBelow = document.elementFromPoint(event.clientX, event.clientY)
+                const elementBelow = document.elementFromPoint(
+                    event.clientX,
+                    event.clientY
+                )
 
                 /**
                  * If Connector Click
                  */
-                const elementBelowIsStartConnector = elementBelow.classList.contains('connector-start')
-                const elementBelowIsEndConnector = elementBelow.classList.contains('connector-end')
+                const elementBelowIsStartConnector =
+                    elementBelow.classList.contains('connector-start')
+                const elementBelowIsEndConnector =
+                    elementBelow.classList.contains('connector-end')
 
-                if (elementBelowIsEndConnector) {
-                    props.setStartConnector(props.id)
-                    return
-                }
-                if (elementBelowIsStartConnector) {
-                    props.setEndConnector(props.id)
-                    return
-                }
-
-                const containerBounds = document.getElementById('canvas').getBoundingClientRect()
+                const containerBounds = document
+                    .getElementById('canvas')
+                    .getBoundingClientRect()
 
                 let mouseTilePositionOffset = {
                     x: 0,
                     y: 0
                 }
 
-                const getYX = (event, containerBounds, mouseTilePositionOffset) => {
+                const getYX = (
+                    event,
+                    containerBounds,
+                    mouseTilePositionOffset
+                ) => {
                     const xExact = event.clientX - containerBounds.left
                     const yExact = event.clientY - containerBounds.top
 
                     const x = xExact - mouseTilePositionOffset.x
                     const y = yExact - mouseTilePositionOffset.y
 
-                    const snapX = props.snapOn ? Math.floor(x / GRID_SIZE) * GRID_SIZE : x
-                    const snapY = props.snapOn ? Math.floor(y / GRID_SIZE) * GRID_SIZE : y
+                    const snapX = props.snapOn
+                        ? Math.floor(x / GRID_SIZE) * GRID_SIZE
+                        : x
+                    const snapY = props.snapOn
+                        ? Math.floor(y / GRID_SIZE) * GRID_SIZE
+                        : y
                     return { snapX, snapY }
                 }
 
@@ -128,22 +143,30 @@ function Tile(props) {
                  * tile.
                  */
                 const setFirstBlockedPosition = (event) => {
-                    const rect = event.target.closest('.target').getBoundingClientRect()
+                    const rect = event.target
+                        .closest('.target')
+                        .getBoundingClientRect()
                     mouseTilePositionOffset = {
                         x: event.clientX - rect.x,
                         y: event.clientY - rect.y
                     }
 
-                    const { snapX, snapY } = getYX(event, containerBounds, mouseTilePositionOffset)
+                    const { snapX, snapY } = getYX(
+                        event,
+                        containerBounds,
+                        mouseTilePositionOffset
+                    )
                     props.set(snapX, snapY)
                 }
 
                 const setBlockedPosition = (event) => {
-                    const { snapX, snapY } = getYX(event, containerBounds, mouseTilePositionOffset)
+                    const { snapX, snapY } = getYX(
+                        event,
+                        containerBounds,
+                        mouseTilePositionOffset
+                    )
                     props.set(snapX, snapY)
                 }
-
-                setFirstBlockedPosition(event)
 
                 const onMouseMove = (event) => {
                     setBlockedPosition(event)
@@ -157,15 +180,70 @@ function Tile(props) {
                         props.onEditClick()
                     }
 
-                    document.removeEventListener('mousemove', onMouseMove)
-                    document.removeEventListener('mouseup', onMouseUp)
+                    document.removeEventListener('pointermove', onMouseMove)
+                    document.removeEventListener('pointerup', onMouseUp)
                 }
 
-                document.addEventListener('mousemove', onMouseMove)
-                document.addEventListener('mouseup', onMouseUp)
+                /**
+                 * Execute
+                 */
+
+                if (elementBelowIsEndConnector) {
+                    let active = true
+
+                    const cnvs = document.getElementById('canvas')
+                    const cnvsPosition = cnvs.getBoundingClientRect()
+                    props.setStartConnector(props.id)
+
+                    document.addEventListener('pointermove', (e) => {
+                        if (!active) return
+                        // if (!props.inProgressLine.active) return
+                        const originalEvent = {
+                            x: event.clientX - cnvsPosition.x,
+                            y: event.clientY - cnvsPosition.y
+                        }
+                        const { snapX, snapY } = getYX(
+                            e,
+                            containerBounds,
+                            mouseTilePositionOffset
+                        )
+
+                        props.setInProgressLine({
+                            active: true,
+                            startX: originalEvent.x,
+                            startY: originalEvent.y,
+                            endX: snapX,
+                            endY: snapY
+                        })
+                    })
+                    document.addEventListener('pointerup', () => {
+                        active = false
+                        props.setInProgressLine({
+                            active: false,
+                            startX: 0,
+                            startY: 0,
+                            endX: 0,
+                            endY: 0
+                        })
+                    })
+                    //return
+                }
+                if (elementBelowIsStartConnector) {
+                    props.setEndConnector(props.id)
+                    // return
+                }
+
+                if (
+                    !elementBelowIsStartConnector &&
+                    !elementBelowIsEndConnector
+                ) {
+                    setFirstBlockedPosition(event)
+                    document.addEventListener('pointermove', onMouseMove)
+                    document.addEventListener('pointerup', onMouseUp)
+                }
             }}
         >
-            {props.type === 'end' && (
+            {props.connectors['start'] && (
                 <div className="cursor-pointer hover:bg-gray-400 top-0 right-0 bottom-0 w-4 bg-gray-700 connector-start  flex items-center"></div>
             )}
             <Icon />
@@ -186,7 +264,7 @@ function Tile(props) {
                     {props.name}
                 </p>
             </div>
-            {props.type === 'start' && (
+            {props.connectors['end'] && (
                 <div className="cursor-pointer hover:bg-gray-400 absolute top-0 right-0 bottom-0 w-4 bg-gray-700 connector-end"></div>
             )}
         </div>
